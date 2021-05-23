@@ -23,6 +23,7 @@ namespace AmazonProvider.Kinesis.Configuration {
         public secreatAccessKey: string;
         public sessionToken: string;
         public useTrickleICE: boolean; //maybe remove to provider layer
+        public widescreen: boolean;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
         constructor(config: any) {

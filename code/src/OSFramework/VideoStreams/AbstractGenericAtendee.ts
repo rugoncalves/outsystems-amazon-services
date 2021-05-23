@@ -22,7 +22,7 @@ namespace OSFramework.VideoStreams {
 
         public abstract sendMessage(message: string): boolean;
 
-        public abstract startConnection(): boolean;
+        public abstract startConnection(...args): boolean;
 
         public abstract stopConnection(): boolean;
     }

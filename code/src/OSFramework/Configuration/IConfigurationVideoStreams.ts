@@ -10,5 +10,6 @@ namespace OSFramework.Configuration {
         hasVideoStream: boolean;
         localStreamPlayerId: string;
         removeStreamPlayerId: string;
+        widescreen: boolean;
     }
 }

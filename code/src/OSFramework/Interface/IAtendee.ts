@@ -3,7 +3,7 @@ namespace OSFramework.Interface {
     export interface IAtendee {
         uniqueId: string;
         sendMessage(message: string): boolean;
-        startConnection(): boolean;
+        startConnection(...args): unknown;
         stopConnection(): boolean;
     }
 }
