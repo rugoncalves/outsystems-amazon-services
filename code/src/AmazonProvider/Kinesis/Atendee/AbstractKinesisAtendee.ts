@@ -16,22 +16,25 @@ namespace AmazonProvider.Kinesis {
         // private peerConnectionStatsInterval: null;
 
         private _kinesisVideoClient: AWS.KinesisVideo;
+        private _role: Enum.Role;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
         constructor(configs: any) {
+        constructor(role: Enum.Role, configs: any) {
             super(
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 new AmazonProvider.Kinesis.Configuration.KinesisConfiguration(
                     configs
                 )
             );
+            this._role = role;
         }
 
         public sendMessage(message: string): boolean {
             throw new Error('Method not implemented.');
         }
 
-        public async startConnection(Role: string): Promise<boolean> {
+        public async startConnection(): Promise<boolean> {
             this._kinesisVideoClient = new AWS.KinesisVideo({
                 region: this.config.region,
                 accessKeyId: this.config.accessKey,
@@ -49,18 +52,19 @@ namespace AmazonProvider.Kinesis {
             // Get signaling channel endpoints
             const channelARN =
                 describeSignalingChannelResponse.ChannelInfo.ChannelARN;
-            console.log(`[${Role}] Channel ARN: ${channelARN}`);
+            console.log(`[${this._role}] Channel ARN: ${channelARN}`);
 
             const getSignalingChannelEndpointResponse =
                 await this._kinesisVideoClient
                     .getSignalingChannelEndpoint({
                         ChannelARN: channelARN,
                         SingleMasterChannelEndpointConfiguration: {
-                            Protocols: ['WSS', 'HTTPS'],
-                            Role: 'MASTER' //KVSWebRTC.Role.VIEWER
+                            Protocols: [Enum.Protocol.WSS, Enum.Protocol.HTTPS],
+                            Role: this._role //KVSWebRTC.Role.VIEWER
                         }
                     })
                     .promise();
+
             const endpointsByProtocol =
                 getSignalingChannelEndpointResponse.ResourceEndpointList.reduce(
                     (endpoints, endpoint) => {
@@ -70,7 +74,7 @@ namespace AmazonProvider.Kinesis {
                     },
                     {}
                 );
-            console.log(`[${Role}] Endpoints: ${endpointsByProtocol}`);
+            console.log(`[${this._role}] Endpoints: ${endpointsByProtocol}`);
 
             // Get ICE server configuration
             const kinesisVideoSignalingChannelsClient =
@@ -79,7 +83,7 @@ namespace AmazonProvider.Kinesis {
                     accessKeyId: this.config.accessKey,
                     secretAccessKey: this.config.secreatAccessKey,
                     sessionToken: this.config.sessionToken,
-                    endpoint: endpointsByProtocol.HTTPS,
+                    endpoint: endpointsByProtocol[Enum.Protocol.HTTPS],
                     correctClockSkew: true
                 });
 
@@ -107,13 +111,12 @@ namespace AmazonProvider.Kinesis {
                     })
                 );
             }
-            console.log(`[${Role}] ICE servers: ${iceServers}`);
-
+            console.log(`[${this._role}] ICE servers: ${iceServers}`);
             // Create Signaling Client
             this.signalingClient = new KVSWebRTC.SignalingClient({
                 channelARN,
-                channelEndpoint: endpointsByProtocol.WSS,
-                role: Role,
+                channelEndpoint: endpointsByProtocol[Enum.Protocol.WSS],
+                role: this._role,
                 region: this.config.region,
                 credentials: {
                     accessKeyId: this.config.accessKey,

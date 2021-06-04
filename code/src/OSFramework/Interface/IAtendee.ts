@@ -3,7 +3,8 @@ namespace OSFramework.Interface {
     export interface IAtendee {
         uniqueId: string;
         sendMessage(message: string): boolean;
-        startConnection(...args): unknown;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        startConnection(...args): any;
         stopConnection(): boolean;
     }
 }

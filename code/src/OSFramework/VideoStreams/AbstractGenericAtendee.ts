@@ -22,7 +22,8 @@ namespace OSFramework.VideoStreams {
 
         public abstract sendMessage(message: string): boolean;
 
-        public abstract startConnection(...args): boolean;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        public abstract startConnection(...args): any;
 
         public abstract stopConnection(): boolean;
     }
