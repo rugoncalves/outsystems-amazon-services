@@ -9,7 +9,7 @@ namespace OSFramework.Configuration {
         hasAudioStream: boolean;
         hasVideoStream: boolean;
         localStreamPlayerId: string;
-        removeStreamPlayerId: string;
+        remoteStreamPlayerId: string;
         widescreen: boolean;
     }
 }

@@ -1,8 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace AmazonProvider.Kinesis {
     export function KinesisAtendeeFactory(
-        isMaster: boolean
+        isMaster: boolean,
+        configs: any
     ): OSFramework.Interface.IAtendee {
-        return undefined;
+        if (isMaster) {
+            return new MasterAtendee(configs);
+        } else {
+            return new ViewerAtendee(configs);
+        }
     }
 }

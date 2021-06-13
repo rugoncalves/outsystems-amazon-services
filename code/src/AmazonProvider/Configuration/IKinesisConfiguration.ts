@@ -5,7 +5,6 @@ namespace AmazonProvider.Configuration {
         endpoint: string;
         forceTurn: boolean;
         natTraversalDisabled: boolean;
-        removeStreamPlayerId: string;
         useTrickleICE: boolean;
     }
 }

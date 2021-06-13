@@ -4,7 +4,7 @@ namespace OSFramework.Interface {
         uniqueId: string;
         sendMessage(message: string): boolean;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        startConnection(...args): any;
-        stopConnection(): boolean;
+        startConnection(...args): boolean | any;
+        stopConnection(): boolean | any;
     }
 }
